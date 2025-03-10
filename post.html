@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post Page</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: linear-gradient(135deg, #e6f3ff, #b3d9ff);
+      }
+      .container {
+        max-width: 600px;
+        margin-top: 30px;
+      }
+      .post-img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="#">MyApp</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="post.html">Posts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="friends.html">Friends</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h2 class="text-center text-primary">Post</h2>
+      <div class="mb-3">
+        <textarea
+          id="postContent"
+          class="form-control"
+          placeholder="Write something..."
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <input type="file" id="imageUpload" class="form-control" />
+      </div>
+      <button class="btn btn-primary w-100" onclick="addPost()">Post</button>
+
+      <h4 class="mt-4">Feed</h4>
+      <div id="postList" class="mt-3"></div>
+    </div>
+
+    <script>
+      function addPost() {
+        const postContent = document.getElementById("postContent").value;
+        const imageInput = document.getElementById("imageUpload");
+        const postList = document.getElementById("postList");
+
+        if (postContent.trim() === "") {
+          alert("Please write something to post.");
+          return;
+        }
+
+        const postDiv = document.createElement("div");
+        postDiv.classList.add("card", "mt-3");
+
+        let imgHTML = "";
+        if (imageInput.files.length > 0) {
+          const file = imageInput.files[0];
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            imgHTML = `<img src="${e.target.result}" class="post-img">`;
+            postDiv.innerHTML = `<div class="card-body"> <p>${postContent}</p> ${imgHTML} <button class="btn btn-danger btn-sm mt-2" onclick="this.parentElement.parentElement.remove()">Delete</button></div>`;
+          };
+          reader.readAsDataURL(file);
+        } else {
+          postDiv.innerHTML = `<div class="card-body"> <p>${postContent}</p> <button class="btn btn-danger btn-sm mt-2" onclick="this.parentElement.parentElement.remove()">Delete</button></div>`;
+        }
+
+        postList.prepend(postDiv);
+        document.getElementById("postContent").value = "";
+        imageInput.value = "";
+      }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
